@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+export PGPASSWORD=$POSTGRES_PASSWORD;
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+  CREATE USER $APP_DB_USER WITH PASSWORD '$APP_DB_PASS';
+  CREATE DATABASE $APP_DB_NAME;
+  GRANT ALL PRIVILEGES ON DATABASE $APP_DB_NAME TO $APP_DB_USER;
+  \connect $APP_DB_NAME $APP_DB_USER
+  BEGIN;
+    CREATE TABLE IF NOT EXISTS Questions (
+        id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        question VARCHAR(1000),
+        image_url VARCHAR(1000),
+        thumb_url VARCHAR(1000),
+        published_at DATE
+    );
+
+    CREATE TABLE IF NOT EXISTS Choices (
+        id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        question_id int,
+        choice VARCHAR(1000),
+        vote INT,
+        created_at date,
+        CONSTRAINT fk_questions_id FOREIGN KEY(question_id) REFERENCES Questions(id)
+    );
+  COMMIT;
+EOSQL
