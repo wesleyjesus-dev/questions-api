@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Question.API.Infrastructure;
 using Question.API.Models;
+using Question.API.Services.Contracts;
 
 namespace Question.API.Controllers
 {
@@ -10,19 +9,22 @@ namespace Question.API.Controllers
     public class QuestionsController : ControllerBase
     {
         private readonly ILogger<QuestionsController> _logger;
-        private readonly QuestionContext _context;
+        private readonly IQuestionService _questionService;
 
         public QuestionsController(ILogger<QuestionsController> logger,
-            QuestionContext context)
+            IQuestionService questionService)
         {
             _logger = logger;
-            _context = context;
+            _questionService = questionService;
         }
 
         [HttpGet]
-        public async Task<List<QuestionDetail>> Get()
+        public async Task<IEnumerable<QuestionDetail>> Get(
+            [FromQuery] int? limit,
+            [FromQuery] int? offset,
+            [FromQuery] string filter)
         {
-            return await _context.Questions.ToListAsync();
+            return await _questionService.GetQuestions(limit, offset, filter);
         }
     }
 }

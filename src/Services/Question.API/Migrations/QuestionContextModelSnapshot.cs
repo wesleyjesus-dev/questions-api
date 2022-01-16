@@ -30,19 +30,19 @@ namespace Question.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Choice")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("QuestionDetailId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Votes")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id", "QuestionId");
 
                     b.HasIndex("QuestionDetailId");
 
