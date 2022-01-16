@@ -12,7 +12,7 @@ using Question.API.Infrastructure;
 namespace Question.API.Migrations
 {
     [DbContext(typeof(QuestionContext))]
-    [Migration("20220116033429_InitialCreate")]
+    [Migration("20220116061535_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,15 +38,12 @@ namespace Question.API.Migrations
                     b.Property<string>("Choice")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("QuestionDetailId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Votes")
                         .HasColumnType("int");
 
                     b.HasKey("Id", "QuestionId");
 
-                    b.HasIndex("QuestionDetailId");
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("Choices", (string)null);
                 });
@@ -78,9 +75,13 @@ namespace Question.API.Migrations
 
             modelBuilder.Entity("Question.API.Models.ChoiceDetail", b =>
                 {
-                    b.HasOne("Question.API.Models.QuestionDetail", null)
+                    b.HasOne("Question.API.Models.QuestionDetail", "Question")
                         .WithMany("Choices")
-                        .HasForeignKey("QuestionDetailId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("Question.API.Models.QuestionDetail", b =>

@@ -33,23 +33,23 @@ namespace Question.API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
                     Choice = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Votes = table.Column<int>(type: "int", nullable: false),
-                    QuestionDetailId = table.Column<int>(type: "int", nullable: true)
+                    Votes = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Choices", x => new { x.Id, x.QuestionId });
                     table.ForeignKey(
-                        name: "FK_Choices_Questions_QuestionDetailId",
-                        column: x => x.QuestionDetailId,
+                        name: "FK_Choices_Questions_QuestionId",
+                        column: x => x.QuestionId,
                         principalTable: "Questions",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Choices_QuestionDetailId",
+                name: "IX_Choices_QuestionId",
                 table: "Choices",
-                column: "QuestionDetailId");
+                column: "QuestionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

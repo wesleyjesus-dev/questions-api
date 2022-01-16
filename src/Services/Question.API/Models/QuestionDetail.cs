@@ -1,4 +1,6 @@
-﻿namespace Question.API.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Question.API.Models
 {
     public class QuestionDetail
     {

@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Question.API.Models
 {
@@ -9,6 +11,7 @@ namespace Question.API.Models
 
         [JsonIgnore]
         public int QuestionId { get; set; }
+        public QuestionDetail Question { get; set; }
         public string Choice { get; set; }
         public int Votes { get; set; }
     }

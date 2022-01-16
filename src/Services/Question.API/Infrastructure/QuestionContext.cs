@@ -17,7 +17,15 @@ namespace Question.API.Infrastructure
         {
             modelBuilder.Entity<QuestionDetail>()
                 .ToTable("Questions")
+                .HasKey(x => x.Id);
+
+            modelBuilder.Entity<QuestionDetail>()
                 .Property(x => x.Id).ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<QuestionDetail>()
+                .HasMany(x => x.Choices)
+                .WithOne(y => y.Question);
+    
 
             modelBuilder.Entity<ChoiceDetail>()
                 .ToTable("Choices")

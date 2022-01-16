@@ -18,7 +18,8 @@ namespace Question.API.Services.Implementations
 
         public async Task<List<QuestionDetail>> GetQuestions()
         {
-            return await _context.Questions.ToListAsync();
+            return await _context.Questions
+                .Include(x => x.Choices).ToListAsync();
         }
 
         public async Task<IEnumerable<QuestionDetail>> GetQuestions(int? limit, int? offset, string? filter)
