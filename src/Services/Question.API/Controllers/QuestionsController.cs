@@ -32,5 +32,11 @@ namespace Question.API.Controllers
         {
             return await _questionService.GetQuestions(limit, offset, filter);
         }
+
+        [HttpGet]
+        public async Task<QuestionDetail> Get([FromRoute] int id)
+        {
+            return await _questionService.GetQuestion(id);
+        }
     }
 }

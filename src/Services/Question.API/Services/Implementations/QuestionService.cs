@@ -57,5 +57,10 @@ namespace Question.API.Services.Implementations
             await _context.SaveChangesAsync();
             return _context.Questions.FirstOrDefault(x => x.Question == questionDetail.Question);
         }
+
+        public async Task<QuestionDetail> GetQuestion(int id)
+        {
+            return await _context.Questions.FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }
