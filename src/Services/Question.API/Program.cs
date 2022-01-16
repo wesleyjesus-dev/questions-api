@@ -7,6 +7,11 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 
+builder.Services.AddLogging(loggingBuilder =>
+{
+    loggingBuilder.AddSeq();
+});
+
 builder.Services.AddControllers()
             .AddJsonOptions(o => o.JsonSerializerOptions
                 .ReferenceHandler = ReferenceHandler.IgnoreCycles
@@ -35,10 +40,9 @@ app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapHealthChecks("/health");
+    endpoints.MapControllers();
 });
 
 app.UseHttpsRedirection();
-
-app.MapControllers();
 
 app.Run();

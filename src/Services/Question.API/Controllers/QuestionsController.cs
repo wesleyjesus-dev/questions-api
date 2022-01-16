@@ -34,6 +34,7 @@ namespace Question.API.Controllers
         }
 
         [HttpGet]
+        [Route("{id:int}")]
         public async Task<QuestionDetail> Get([FromRoute] int id)
         {
             return await _questionService.GetQuestion(id);
