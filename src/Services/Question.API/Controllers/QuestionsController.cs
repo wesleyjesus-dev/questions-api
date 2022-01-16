@@ -18,6 +18,12 @@ namespace Question.API.Controllers
             _questionService = questionService;
         }
 
+        [HttpPost]
+        public async Task<QuestionDetail> Post([FromBody] QuestionDetail question)
+        {
+            return await _questionService.CreateQuestion(question);
+        }
+
         [HttpGet]
         public async Task<IEnumerable<QuestionDetail>> Get(
             [FromQuery] int? limit,

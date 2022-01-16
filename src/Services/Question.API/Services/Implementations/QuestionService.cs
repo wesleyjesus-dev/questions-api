@@ -50,5 +50,12 @@ namespace Question.API.Services.Implementations
         {
             return limit.HasValue ? questions.Take(limit.Value).ToList() : questions.ToList();
         }
+
+        public async Task<QuestionDetail> CreateQuestion(QuestionDetail questionDetail)
+        {
+            _context.Questions.Add(questionDetail);
+            await _context.SaveChangesAsync();
+            return _context.Questions.FirstOrDefault(x => x.Question == questionDetail.Question);
+        }
     }
 }

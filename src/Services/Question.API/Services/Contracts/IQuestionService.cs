@@ -7,5 +7,7 @@ namespace Question.API.Services.Contracts
         Task<List<QuestionDetail>> GetQuestions();
 
         Task<IEnumerable<QuestionDetail>> GetQuestions(int? limit, int? offset, string? filter);
+
+        Task<QuestionDetail> CreateQuestion(QuestionDetail questionDetail);
     }
 }
