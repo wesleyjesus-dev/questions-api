@@ -19,6 +19,7 @@ builder.Services.AddDbContext<QuestionContext>(options =>
 
 builder.Services.AddLogging();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
@@ -29,9 +30,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseRouting();
 
-app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHealthChecks("/health");
+});
+
+app.UseHttpsRedirection();
 
 app.MapControllers();
 
