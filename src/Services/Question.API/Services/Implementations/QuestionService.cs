@@ -9,11 +9,16 @@ namespace Question.API.Services.Implementations
     {
         private readonly QuestionContext _context;
         private readonly ILogger<QuestionService> _logger;
+        private readonly ServiceBus.EventHandler _eventHandler;
 
-        public QuestionService(QuestionContext context, ILogger<QuestionService> logger)
+        public QuestionService(
+            QuestionContext context, 
+            ILogger<QuestionService> logger,
+            ServiceBus.EventHandler eventHandler)
         {
             _context = context;
             _logger = logger;
+            _eventHandler = eventHandler;
         }
 
         public async Task<List<QuestionDetail>> GetQuestions()
@@ -55,7 +60,8 @@ namespace Question.API.Services.Implementations
         {
             _context.Questions.Add(questionDetail);
             await _context.SaveChangesAsync();
-            return _context.Questions.FirstOrDefault(x => x.Question == questionDetail.Question);
+            await _eventHandler.Emit("questionCreatedEvent", questionDetail);
+            return _context.Questions.Include(x => x.Choices).FirstOrDefault(x => x.Question == questionDetail.Question);
         }
 
         public async Task<QuestionDetail> GetQuestion(int id)

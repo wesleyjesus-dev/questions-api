@@ -12,18 +12,22 @@ var config = builder.Configuration;
 builder.Services.AddBaseService(config);
 
 builder.Services.AddControllers()
-            .AddJsonOptions(o => o.JsonSerializerOptions
-                .ReferenceHandler = ReferenceHandler.IgnoreCycles
-                );
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<QuestionContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddSingleton<Question.API.ServiceBus.EventHandler>();
+
 builder.Services.AddLogging();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddHealthChecks();
+
 
 var app = builder.Build();
 

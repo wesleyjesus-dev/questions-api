@@ -6,6 +6,7 @@ using Question.Core.Configurations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,8 @@ namespace Question.Core.Services
     {
         public static IServiceCollection AddBaseService(this IServiceCollection service, IConfiguration configuration)
         {
-            service.AddKafkaConfig(configuration);
+            service.AddKafkaConsumerConfig(configuration);
+            service.AddKafkaProducerConfig(configuration);
             service.AddDistributedLogging();
 
             return service;
@@ -31,7 +33,27 @@ namespace Question.Core.Services
             return service;
         }
 
-        public static IServiceCollection AddKafkaConfig(this IServiceCollection service, IConfiguration configuration)
+        public static IServiceCollection AddKafkaProducerConfig(this IServiceCollection service, IConfiguration configuration)
+        {
+            var kafkaConfig = configuration.GetRequiredSection("KafkaConfiguration").Get<KafkaConfiguration>();
+            var kafkaBootstrapServerEnv = Environment.GetEnvironmentVariable("KAFKA_BOOTSTRAP_SERVER");
+            var bootstrapServer =
+                !String.IsNullOrEmpty(kafkaBootstrapServerEnv) ? kafkaBootstrapServerEnv
+                : kafkaConfig.BootstrapServer;
+
+
+            var producerConfig = new ProducerConfig
+            {
+                ClientId = Dns.GetHostName(),
+                BootstrapServers = bootstrapServer,
+            };
+
+            service.AddSingleton(producerConfig);
+
+            return service;
+        }
+
+        public static IServiceCollection AddKafkaConsumerConfig(this IServiceCollection service, IConfiguration configuration)
         {
             var kafkaConfig = configuration.GetRequiredSection("KafkaConfiguration").Get<KafkaConfiguration>();
             var kafkaBootstrapServerEnv = Environment.GetEnvironmentVariable("KAFKA_BOOTSTRAP_SERVER");
