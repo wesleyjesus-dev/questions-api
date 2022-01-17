@@ -2,15 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Question.API.Infrastructure;
 using Question.API.Services.Contracts;
 using Question.API.Services.Implementations;
+using Question.Core.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var config = builder.Configuration;
 
-builder.Services.AddLogging(loggingBuilder =>
-{
-    loggingBuilder.AddSeq();
-});
+builder.Services.AddBaseService(config);
 
 builder.Services.AddControllers()
             .AddJsonOptions(o => o.JsonSerializerOptions
