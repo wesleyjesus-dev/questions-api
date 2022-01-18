@@ -1,0 +1,140 @@
+﻿[
+  {
+    "id": 1,
+    "Question": "Favourite programming language?",
+    "ImageUrl": "https://dummyimage.com/600x400/000/fff.png&text=Question+1+image+(600x400)",
+    "ThumbUrl": "https://dummyimage.com/120x120/000/fff.png&text=Question+1+image+(120x120)",
+    "PublishedAt": "2015-08-05T08:40:51.620Z",
+    "Choices": [
+      {
+        "Id": 1,
+        "QuestionId": 1,
+        "Choice": "Swift",
+        "Votes": 2048
+      },
+      {
+        "Id": 2,
+        "QuestionId": 1,
+        "Choice": "Python",
+        "Votes": 1024
+      },
+      {
+        "Id": 3,
+        "QuestionId": 1,
+        "Choice": "Objective-C",
+        "Votes": 512
+      },
+      {
+        "Id": 4,
+        "QuestionId": 1,
+        "Choice": "Ruby",
+        "Votes": 256
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "Question": "Favourite programming language?",
+    "ImageUrl": "https://dummyimage.com/600x400/000/fff.png&text=Question+1+image+(600x400)",
+    "ThumbUrl": "https://dummyimage.com/120x120/000/fff.png&text=Question+1+image+(120x120)",
+    "PublishedAt": "2015-08-05T08:40:51.620Z",
+    "Choices": [
+      {
+        "Id": 1,
+        "QuestionId": 2,
+        "Choice": "Swift",
+        "Votes": 2048
+      },
+      {
+        "Id": 2,
+        "QuestionId": 2,
+        "Choice": "Python",
+        "Votes": 1024
+      },
+      {
+        "Id": 3,
+        "QuestionId": 2,
+        "Choice": "Objective-C",
+        "Votes": 512
+      },
+      {
+        "Id": 4,
+        "QuestionId": 2,
+        "Choice": "Ruby",
+        "Votes": 256
+      },
+      {
+        "Id": 5,
+        "QuestionId": 2,
+        "Choice": "Csharp",
+        "Votes": 256
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "Question": "Favourite programming language?",
+    "ImageUrl": "https://dummyimage.com/600x400/000/fff.png&text=Question+1+image+(600x400)",
+    "ThumbUrl": "https://dummyimage.com/120x120/000/fff.png&text=Question+1+image+(120x120)",
+    "PublishedAt": "2015-08-05T08:40:51.620Z",
+    "Choices": [
+      {
+        "Id": 1,
+        "QuestionId": 3,
+        "Choice": "Swift",
+        "Votes": 2048
+      },
+      {
+        "Id": 2,
+        "QuestionId": 3,
+        "Choice": "Python",
+        "Votes": 1024
+      },
+      {
+        "Id": 3,
+        "QuestionId": 3,
+        "Choice": "Objective-C",
+        "Votes": 512
+      },
+      {
+        "Id": 4,
+        "QuestionId": 3,
+        "Choice": "Ruby",
+        "Votes": 256
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "Question": "Favourite programming language?",
+    "ImageUrl": "https://dummyimage.com/600x400/000/fff.png&text=Question+1+image+(600x400)",
+    "ThumbUrl": "https://dummyimage.com/120x120/000/fff.png&text=Question+1+image+(120x120)",
+    "PublishedAt": "2015-08-05T08:40:51.620Z",
+    "Choices": [
+      {
+        "Id": 1,
+        "QuestionId": 4,
+        "Choice": "Swift",
+        "Votes": 2048
+      },
+      {
+        "Id": 2,
+        "QuestionId": 4,
+        "Choice": "Python",
+        "Votes": 1024
+      },
+      {
+        "Id": 3,
+        "QuestionId": 4,
+        "Choice": "Objective-C",
+        "Votes": 512
+      },
+      {
+        "Id": 4,
+        "QuestionId": 4,
+        "Choice": "Ruby",
+        "Votes": 256
+      }
+    ]
+  }
+]
