@@ -20,7 +20,7 @@ namespace Question.API.Infrastructure
                 .HasKey(x => x.Id);
 
             modelBuilder.Entity<QuestionDetail>()
-                .Property(x => x.Id).ValueGeneratedOnAdd();
+                .Property(x => x.Id);
 
             modelBuilder.Entity<QuestionDetail>()
                 .HasMany(x => x.Choices)

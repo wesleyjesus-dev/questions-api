@@ -1,28 +1,21 @@
 ﻿using Microsoft.Extensions.Logging;
-using Question.API.Models;
 using Question.API.Services.Implementations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Question.API.Tests.UnitTests.Services
 {
     public class WhenTheFilter : IClassFixture<BaseTest>
     {
-        private BaseTest _database;
-        public WhenTheFilter(BaseTest database)
+        private BaseTest _basetest;
+        public WhenTheFilter(BaseTest basetest)
         {
-            _database = database;
+            _basetest = basetest;
         }
 
         [Fact]
         public async void AndChoiceContainsTheWordCsharp()
         {
-            Moq.Mock<ILogger<QuestionService>> logger = new Moq.Mock<ILogger<QuestionService>>();
-            var questionService = new QuestionService(_database.context, logger.Object);
+            var questionService = new QuestionService(_basetest.context, _basetest.logger.Object, _basetest.eventHandler.Object);
             var questions = await questionService.GetQuestions(null, null, "Csharp");
             Assert.Single(questions);
         }

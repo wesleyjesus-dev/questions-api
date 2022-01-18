@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Question.API.Exceptions;
 using Question.API.Infrastructure;
 using Question.API.Models;
+using Question.API.ServiceBus;
 using Question.API.Services.Contracts;
 
 namespace Question.API.Services.Implementations
@@ -9,12 +11,12 @@ namespace Question.API.Services.Implementations
     {
         private readonly QuestionContext _context;
         private readonly ILogger<QuestionService> _logger;
-        private readonly ServiceBus.EventHandler _eventHandler;
+        private readonly IEventHandler _eventHandler;
 
         public QuestionService(
             QuestionContext context, 
             ILogger<QuestionService> logger,
-            ServiceBus.EventHandler eventHandler)
+            IEventHandler eventHandler)
         {
             _context = context;
             _logger = logger;
@@ -60,13 +62,53 @@ namespace Question.API.Services.Implementations
         {
             _context.Questions.Add(questionDetail);
             await _context.SaveChangesAsync();
-            await _eventHandler.Emit("questionCreatedEvent", questionDetail);
-            return _context.Questions.Include(x => x.Choices).FirstOrDefault(x => x.Question == questionDetail.Question);
+            await _eventHandler.Emit("questionCreated", questionDetail);
+            return questionDetail;
         }
 
         public async Task<QuestionDetail> GetQuestion(int id)
         {
-            return await _context.Questions.FirstOrDefaultAsync(x => x.Id == id);
+            var question = await _context.Questions.Include(x => x.Choices).FirstOrDefaultAsync(x => x.Id == id);
+            if (question == null) throw new NotFoundException();
+            return question;
+        }
+
+        public async Task<QuestionDetail> UpdateQuestion(QuestionDetail questionDetail)
+        {
+            var question = await GetQuestion(questionDetail.Id);
+
+            question.Question = questionDetail.Question;
+            question.ThumbUrl = questionDetail.ThumbUrl;
+            question.ImageUrl = questionDetail.ImageUrl;
+            
+            question.Choices.Clear();
+            
+            questionDetail.Choices.ToList().ForEach(x =>
+            {
+                question.Choices.Add(x);
+            });      
+            
+            _context.SaveChanges();
+
+            await _eventHandler.Emit("updatedQuestion", question);
+
+            return question;
+        }
+
+        public async Task<QuestionDetail> VoteChoice(int id, string choice)
+        {
+            var question = await GetQuestion(id);
+
+            question.Choices.ToList().ForEach(x =>
+            {
+                if (x.Choice.ToLower().Contains(choice.ToLower())) x.Votes += 1;
+            });
+
+            _context.SaveChanges();
+
+            await _eventHandler.Emit("votedChoice", question);
+
+            return question;
         }
     }
 }

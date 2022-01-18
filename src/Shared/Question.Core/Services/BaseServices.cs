@@ -23,6 +23,13 @@ namespace Question.Core.Services
             return service;
         }
 
+        public static IServiceCollection AddSmtpConfiguration(this IServiceCollection service, IConfiguration configuration)
+        {
+            var smtpConfiguration = configuration.GetRequiredSection("SmtpConfiguration").Get<SmtpConfiguration>();
+            service.AddSingleton(smtpConfiguration);
+            return service;
+        }
+
         public static IServiceCollection AddDistributedLogging(this IServiceCollection service)
         {
             service.AddLogging(loggingBuilder =>

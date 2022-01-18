@@ -6,18 +6,16 @@ namespace Question.API.Tests.UnitTests.Services
 {
     public class WhenYouSearchAQuestion : IClassFixture<BaseTest>
     {
-        private BaseTest _database;
-
-        public WhenYouSearchAQuestion(BaseTest database)
+        private BaseTest _baseTest;
+        public WhenYouSearchAQuestion(BaseTest baseTest)
         {
-            _database = database;
+            _baseTest = baseTest;
         }
 
         [Fact]
         public async void AndFind()
         {
-            Moq.Mock<ILogger<QuestionService>> logger = new Moq.Mock<ILogger<QuestionService>>();
-            var questionService = new QuestionService(_database.context, logger.Object);
+            var questionService = new QuestionService(_baseTest.context, _baseTest.logger.Object, _baseTest.eventHandler.Object);
             var question = await questionService.GetQuestion(1);
             Assert.NotNull(question);
         }

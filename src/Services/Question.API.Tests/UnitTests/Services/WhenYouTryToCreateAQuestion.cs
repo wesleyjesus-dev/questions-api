@@ -9,19 +9,17 @@ namespace Question.API.Tests.UnitTests.Services
 {
     public class WhenYouTryToCreateAQuestion : IClassFixture<BaseTest>
     {
-        private BaseTest _database;
-
-        public WhenYouTryToCreateAQuestion(BaseTest database)
+        private BaseTest _baseTest;
+        public WhenYouTryToCreateAQuestion(BaseTest baseTest)
         {
-            _database = database;
+            _baseTest = baseTest;
         }
 
 
         [Fact]
         public async Task AndReturnSuccess()
         {
-            Moq.Mock<ILogger<QuestionService>> logger = new Moq.Mock<ILogger<QuestionService>>();
-            var questionService = new QuestionService(_database.context, logger.Object);
+            var questionService = new QuestionService(_baseTest.context, _baseTest.logger.Object, _baseTest.eventHandler.Object);
             var question = new QuestionDetail()
             {
                 Question = "A test question",
@@ -37,8 +35,8 @@ namespace Question.API.Tests.UnitTests.Services
         [Fact]
         public async Task AndReturnError()
         {
-            Moq.Mock<ILogger<QuestionService>> logger = new Moq.Mock<ILogger<QuestionService>>();
-            var questionService = new QuestionService(_database.context,  logger.Object);
+
+            var questionService = new QuestionService(_baseTest.context, _baseTest.logger.Object, _baseTest.eventHandler.Object);
             var question = new QuestionDetail()
             {
                 Question = "A test question",

@@ -18,6 +18,21 @@ namespace Question.API.Controllers
             _questionService = questionService;
         }
 
+        [HttpPut]
+        [Route("{id:int}/choice/{choice}")]
+        public async Task<QuestionDetail> Put([FromRoute] int id, string choice)
+        {
+            return await _questionService.VoteChoice(id, choice);
+        }
+
+
+        [HttpPut]
+        public async Task<QuestionDetail> Put([FromBody] QuestionDetail question)
+        {
+            return await _questionService.UpdateQuestion(question);
+        }
+
+
         [HttpPost]
         public async Task<QuestionDetail> Post([FromBody] QuestionDetail question)
         {

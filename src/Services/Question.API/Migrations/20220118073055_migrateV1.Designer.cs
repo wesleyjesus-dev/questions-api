@@ -12,8 +12,8 @@ using Question.API.Infrastructure;
 namespace Question.API.Migrations
 {
     [DbContext(typeof(QuestionContext))]
-    [Migration("20220116061535_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220118073055_migrateV1")]
+    partial class migrateV1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

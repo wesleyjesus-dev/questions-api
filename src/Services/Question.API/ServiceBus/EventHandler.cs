@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Question.API.ServiceBus
 {
-    public class EventHandler
+    public class EventHandler : IEventHandler
     {
         private readonly ProducerConfig _config;
         public EventHandler(ProducerConfig config)

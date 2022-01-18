@@ -1,5 +1,8 @@
+using JorgeSerrano.Json;
 using Microsoft.EntityFrameworkCore;
 using Question.API.Infrastructure;
+using Question.API.Middlewares.Extensions;
+using Question.API.ServiceBus;
 using Question.API.Services.Contracts;
 using Question.API.Services.Implementations;
 using Question.Core.Services;
@@ -12,17 +15,18 @@ var config = builder.Configuration;
 builder.Services.AddBaseService(config);
 
 builder.Services.AddControllers()
-    .AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
+    .AddJsonOptions(configure =>
+    {
+        configure.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        configure.JsonSerializerOptions.PropertyNamingPolicy = new JsonSnakeCaseNamingPolicy();
+    });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<QuestionContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddSingleton<Question.API.ServiceBus.EventHandler>();
+builder.Services.AddSingleton<IEventHandler, Question.API.ServiceBus.EventHandler>();
 
 builder.Services.AddLogging();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
@@ -31,12 +35,13 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseErrorHandler();
 
 app.UseRouting();
 
