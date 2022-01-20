@@ -10,7 +10,15 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+IWebHostEnvironment env = builder.Environment;
+
 var config = builder.Configuration;
+
+builder.Configuration
+    .SetBasePath(env.ContentRootPath)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
 
 builder.Services.AddBaseService(config);
 
@@ -23,8 +31,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<QuestionContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<QuestionContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    
 
 builder.Services.AddSingleton<IEventHandler, Question.API.ServiceBus.EventHandler>();
 
@@ -34,6 +42,7 @@ builder.Services.AddHealthChecks();
 
 
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -50,7 +59,5 @@ app.UseEndpoints(endpoints =>
     endpoints.MapHealthChecks("/health");
     endpoints.MapControllers();
 });
-
-app.UseHttpsRedirection();
 
 app.Run();

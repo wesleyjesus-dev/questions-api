@@ -1,11 +1,12 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Workers/Question.Analytics/Question.Analytics.csproj", "Workers/Question.Analytics/"]
+COPY ["Shared/Question.Core/Question.Core.csproj", "Shared/Question.Core/"]
 RUN dotnet restore "Workers/Question.Analytics/Question.Analytics.csproj"
 COPY . .
 WORKDIR "/src/Workers/Question.Analytics"

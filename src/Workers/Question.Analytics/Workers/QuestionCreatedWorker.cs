@@ -19,7 +19,6 @@ namespace Question.Analytics.Workers
 
         public QuestionCreatedWorker(
             ILogger<QuestionCreatedWorker> logger,
-            QuestionRepository questionRepository,
             ConsumerConfig consumerConfig,
             IQuestionService questionService)
         {
@@ -32,7 +31,7 @@ namespace Question.Analytics.Workers
         {
             using (var c = new ConsumerBuilder<Ignore, string>(_consumerConfig).Build())
             {
-                c.Subscribe("questionCreatedEvent");
+                c.Subscribe("questionCreated");
                 var cts = new CancellationTokenSource();
 
                 try

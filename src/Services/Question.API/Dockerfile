@@ -2,12 +2,12 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
+EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Services/Question.API/Question.API.csproj", "Services/Question.API/"]
+COPY ["Shared/Question.Core/Question.Core.csproj", "Shared/Question.Core/"]
 RUN dotnet restore "Services/Question.API/Question.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Question.API"

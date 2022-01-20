@@ -9,17 +9,17 @@ using Question.Analytics.Services.Contracts;
 using Question.Core.Services;
 
 IConfiguration config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json")
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables()
     .Build();
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddBaseService(config);
         services.AddSingleton<IQuestionRepository, QuestionRepository>();
-        services.AddHostedService<QuestionCreatedWorker>();
         services.AddSingleton<IQuestionService, QuestionService>();
+        services.AddBaseService(config);
+        services.AddHostedService<QuestionCreatedWorker>();
     })
     .Build();
 

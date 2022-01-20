@@ -1,13 +1,53 @@
 version: '2'
 services:
+  web:
+    container_name: question-api
+    build:
+      context: ./src
+      dockerfile: Services/Question.API/Dockerfile
+    ports:
+      - '5000:5000'
+    environment:
+      - ASPNETCORE_URLS=http://*:5000
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:DefaultConnection=Server=sqlserver,1433;Database=Question;User=sa;Password=password1234;
+      - KafkaConfiguration:BootstrapServer=kafka:9092
+      - Seq:ServerUrl=seq:5341
+    networks:
+      - questionnetwork
+    depends_on:
+      - db
+      - kafka
+      - sql-server-db
+      - seq
+    command: ["dotnet", "ef", "database update"]
+
+  worker:
+    container_name: worker-analytics
+    build:
+      context: ./src
+      dockerfile: Workers/Question.Analytics/Dockerfile
+    networks:
+      - questionnetwork
+    depends_on:
+      - mongo
+      - kafka
+      - seq
+    environment:
+      - ConnectionStrings:DefaultConnection=mongodb://mongo:27017/analytic
+      - KAFKA_BOOTSTRAP_SERVER=kafka:9092
+      - Seq:ServerUrl=seq:5341
 
   mongodb:
+    container_name: mongo
     image: mongo
     restart: always
     ports:
       - '27017:27017'
     environment:
       - MONGO_INITDB_DATABASE=analytics
+    networks:
+      - questionnetwork
 
   zookeeper:
     container_name: zookeeper
@@ -58,6 +98,8 @@ services:
       SA_PASSWORD: "password1234"
       ACCEPT_EULA: "Y"
       MSSQL_PID: Express
+    networks:
+      - questionnetwork
     volumes:
       - sqlvolume:/var/opt/mssql
 
@@ -75,4 +117,4 @@ volumes:
 
 networks:
   questionnetwork:
-    external: true
+    external: false

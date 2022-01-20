@@ -20,7 +20,7 @@ namespace Question.Analytics.Services.Implementations
         public async Task Create(QuestionDetail? question)
         {
             _logger.LogInformation($"Question id {question.Id} received");
-            await _questionRepository.Create(question);
+             await _questionRepository.Create(question);
             _logger.LogInformation($"Question id {question.Id} saved");
         }
     }
